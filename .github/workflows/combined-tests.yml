@@ -1,0 +1,93 @@
+name: PreCare Combined CI & Test Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  website-tests:
+    name: Website Selenium Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install Selenium dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install selenium pytest pytest-html
+
+      - name: Run 300 Selenium Website tests
+        run: |
+          mkdir -p reports
+          pytest tests/selenium/ -v -W ignore --html=reports/selenium-report.html --self-contained-html
+
+      - name: Upload Selenium report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: combined-selenium-report
+          path: reports/selenium-report.html
+
+  mobile-tests:
+    name: Mobile Appium Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install Appium test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install Appium-Python-Client pytest pytest-html selenium
+
+      - name: Run 305 Appium Mobile tests
+        run: |
+          mkdir -p reports
+          pytest tests/appium/ -v --html=reports/appium-report.html --self-contained-html
+
+      - name: Upload Appium report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: combined-appium-report
+          path: reports/appium-report.html
+
+  backend-tests:
+    name: Backend Load & Security Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install backend and testing dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install locust pytest pytest-html pip-audit bandit flake8 -r mobile/PreCare-App/precare__backend-main/requirements.txt
+
+      - name: Run Concurrent Backend Load Test
+        run: |
+          python3 tests/api/test_backend_load.py
+
+      - name: Audit Backend Dependencies
+        run: |
+          pip-audit -r mobile/PreCare-App/precare__backend-main/requirements.txt || true

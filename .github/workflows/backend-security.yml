@@ -1,0 +1,39 @@
+name: PreCare Backend Security & Quality
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  security-audit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install security auditing tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install pip-audit bandit flake8
+
+      - name: Audit Python Dependencies for Known Vulnerabilities
+        run: |
+          pip-audit -r mobile/PreCare-App/precare__backend-main/requirements.txt || true
+
+      - name: Run Static Security Analysis (Bandit SAST)
+        run: |
+          bandit -r mobile/PreCare-App/precare__backend-main/ -ll -ii || true
+
+      - name: Run Backend Code Quality Check (Flake8)
+        run: |
+          flake8 mobile/PreCare-App/precare__backend-main/ --count --select=E9,F63,F7,F82 --show-source --statistics || true

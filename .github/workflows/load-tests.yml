@@ -1,0 +1,49 @@
+name: PreCare Load & Performance Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  load-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install locust pytest pytest-html -r mobile/PreCare-App/precare__backend-main/requirements.txt
+
+      - name: Run Concurrent Backend Load Test
+        run: |
+          python3 tests/api/test_backend_load.py
+
+      - name: Start FastAPI Backend in Background
+        run: |
+          cd mobile/PreCare-App/precare__backend-main
+          python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 &
+          sleep 3
+
+      - name: Run Headless Locust Load Test (50 Users)
+        run: |
+          mkdir -p reports
+          locust -f tests/api/locustfile.py --headless -u 50 -r 10 --run-time 15s --host http://127.0.0.1:8000 --html reports/load-test-report.html || true
+
+      - name: Upload Performance HTML Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: precare-load-test-report
+          path: reports/load-test-report.html

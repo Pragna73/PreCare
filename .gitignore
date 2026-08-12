@@ -1,0 +1,76 @@
+# ==========================================
+# PreCare Unified Git Ignore Configuration
+# ==========================================
+
+# 1. Environment & Local Secrets
+.env
+*.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+*.key
+*.p12
+
+# 2. Python Environment & Artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+env/
+ENV/
+build/
+dist/
+*.egg-info/
+
+# 3. Node & Web Build Artifacts
+node_modules/
+dist/
+dist-release/
+.next/
+out/
+.turbo/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# 4. iOS, Xcode & Swift Artifacts
+DerivedData/
+*.xcuserstate
+*.xcuserdatad
+xcuserdata/
+*.xcscmblueprint
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# 5. Databases, Journals & Media Uploads
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+precare.db
+data/uploads/
+uploads/
+reports/
+
+# 6. Operating System & Editor Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/

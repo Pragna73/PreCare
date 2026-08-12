@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Template for PreCare/Config.plist. Copy to Config.plist and fill in.
+
+  Client-safe values only. The Supabase service-role key, Resend key and
+  Gemini/NVIDIA keys must stay in precare__backend-main/.env.
+-->
+<plist version="1.0">
+<dict>
+	<key>APIBaseURL</key>
+	<string>http://127.0.0.1:8000</string>
+	<key>SupabaseURL</key>
+	<string>https://&lt;project-ref&gt;.supabase.co</string>
+	<key>SupabaseAnonKey</key>
+	<string></string>
+	<key>GoogleMapsAPIKey</key>
+	<string></string>
+</dict>
+</plist>
