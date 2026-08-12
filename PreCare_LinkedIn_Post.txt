@@ -1,0 +1,53 @@
+🚀 Excited to share my latest end-to-end healthcare engineering project: PreCare — AI-Powered Pregnancy Monitoring & Clinical Risk Analysis Platform!
+
+Maternal and fetal health during pregnancy requires continuous, proactive tracking. However, complex lab reports and delayed risk identification often cause anxiety and critical care delays. 
+
+To bridge this gap, I designed and engineered PreCare — a unified digital healthcare ecosystem consolidating a native iOS mobile application, a clinical web portal, a high-throughput Python FastAPI backend, and automated multi-layer testing pipelines.
+
+---
+
+💡 What PreCare Does:
+• 📄 Clinical Medical Report Analysis: Extracts maternal biomarkers (Hemoglobin, Blood Pressure, Glucose, FHR) from lab reports and classifies maternal risk (Good, Warning, Danger) with actionable clinical next steps.
+• 💬 Maya AI Maternal Assistant: An intelligent pregnancy triage assistant offering trimester-specific guidance (exercise safety in Week 32/34, dietary guidelines, kick counting, and emergency triage).
+• 🩺 Digital Twin & Health Vitals: Real-time monitoring of maternal vitals, kick counters, and prenatal doctor appointment scheduling.
+• 🚨 One-Tap Emergency Triage: Instant emergency contact notification and nearby maternity hospital routing.
+
+---
+
+🧠 Architecture & Technology Stack:
+• 📱 Mobile: Native SwiftUI (iOS 17+), MVVM Architecture, Xcode, Codemagic CI/CD.
+• 🌐 Web Platform: React 18, TypeScript, Vite, TailwindCSS, Supabase integration.
+• ⚡ Backend API: Python FastAPI (40 REST endpoints), SQLAlchemy, SQLite with Write-Ahead Logging (WAL) for zero-lock concurrency.
+• 🤖 AI & OCR: Google Gemini Flash LLM orchestration, intelligent fallback rules, and automated medical report OCR extraction.
+
+---
+
+🧪 Rigorous Automated Testing & Quality Engineering:
+Quality and reliability are non-negotiable in digital health. PreCare features a comprehensive automated testing suite:
+• 🌐 300 Automated Selenium Tests: Validating clinical test cases across the web portal with automated HTML test reporting.
+• 📱 305 Automated Appium Mobile Tests: Testing iOS authentication, interactive password visibility toggles, Maya AI chat, and appointment booking flows.
+• ⚡ Load & Performance Benchmarks: Stress-tested with Locust (50 concurrent users) achieving 836+ requests/sec with a 3.94 ms average response time.
+• 🛡️ DevSecOps & SAST: Integrated `pip-audit` for dependency CVE scanning, Bandit for static code analysis, and Flake8 linting.
+
+---
+
+⚙️ Unified CI/CD Automation (GitHub Actions):
+Configured 6 automated workflows ensuring continuous quality on every push:
+1. `combined-tests.yml` — Master end-to-end validation pipeline
+2. `selenium-tests.yml` — Automated Selenium web test suite
+3. `appium-tests.yml` — Automated Appium mobile test suite
+4. `backend-security.yml` — Dependency vulnerability & SAST scans
+5. `load-tests.yml` — Headless Locust concurrency benchmarks
+6. `package-release.yml` — Automated packaging of the complete project into a single clean release ZIP (`PreCare-complete-project.zip`)
+
+---
+
+📚 Key Learnings:
+Building PreCare gave me hands-on experience in full-stack architecture, native iOS development with SwiftUI, asynchronous backend design with FastAPI, enterprise CI/CD workflows, and multi-platform automation testing with Selenium & Appium.
+
+🔗 GitHub Repository:
+https://github.com/Pragna73/PreCare
+
+I'd love to hear your feedback, thoughts, or suggestions in the comments! 👇
+
+#PreCare #AI #HealthcareAI #SoftwareEngineering #SwiftUI #iOSDev #ReactJS #FastAPI #Python #Selenium #Appium #AutomationTesting #GitHubActions #DevOps #CICD #QualityAssurance
