@@ -46,7 +46,7 @@ def create_three_sheet_excel_report(output_path, summary_dict, test_cases_list, 
     ws_sum.merge_cells("A1:B1")
     title_cell = ws_sum["A1"]
     title_cell.value = summary_dict.get("Report Title", "PreCare Automated Test Execution Report")
-    title_cell.font = Font(name="Segoe UI", size=14, bold=True, color="FFFFFF")
+    title_cell.font = Font(name="Arial", size=14, bold=True, color="FFFFFF")
     title_cell.fill = PatternFill(start_color=HEADER_BG, end_color=HEADER_BG, fill_type="solid")
     title_cell.alignment = Alignment(horizontal="center", vertical="center")
     ws_sum.row_dimensions[1].height = 36
@@ -57,7 +57,7 @@ def create_three_sheet_excel_report(output_path, summary_dict, test_cases_list, 
     for c_idx in range(1, 3):
         c = ws_sum.cell(row=2, column=c_idx)
         c.fill = PatternFill(start_color=HEADER_BG_DARK, end_color=HEADER_BG_DARK, fill_type="solid")
-        c.font = Font(name="Segoe UI", size=10, bold=True, color="FFFFFF")
+        c.font = Font(name="Arial", size=10, bold=True, color="FFFFFF")
         c.alignment = Alignment(horizontal="left" if c_idx == 1 else "center", vertical="center")
         c.border = thin_border
 
@@ -69,8 +69,8 @@ def create_three_sheet_excel_report(output_path, summary_dict, test_cases_list, 
         ws_sum.row_dimensions[r_idx].height = 20
         c1 = ws_sum.cell(row=r_idx, column=1)
         c2 = ws_sum.cell(row=r_idx, column=2)
-        c1.font = Font(name="Segoe UI", size=10, bold=True, color="1F2937")
-        c2.font = Font(name="Segoe UI", size=10, color="111827")
+        c1.font = Font(name="Arial", size=10, bold=True, color="1F2937")
+        c2.font = Font(name="Arial", size=10, color="111827")
         c1.border = thin_border
         c2.border = thin_border
         c1.alignment = Alignment(horizontal="left", vertical="center")
@@ -79,10 +79,10 @@ def create_three_sheet_excel_report(output_path, summary_dict, test_cases_list, 
         if k in ["Overall Result", "Overall Security Status", "Status"]:
             if str(v).upper() in ["PASSED", "PASS", "SECURE", "0 VULNERABILITIES"]:
                 c2.fill = PatternFill(start_color=PASS_BG, end_color=PASS_BG, fill_type="solid")
-                c2.font = Font(name="Segoe UI", size=10, bold=True, color=PASS_TEXT)
+                c2.font = Font(name="Arial", size=10, bold=True, color=PASS_TEXT)
             else:
                 c2.fill = PatternFill(start_color=FAIL_BG, end_color=FAIL_BG, fill_type="solid")
-                c2.font = Font(name="Segoe UI", size=10, bold=True, color=FAIL_TEXT)
+                c2.font = Font(name="Arial", size=10, bold=True, color=FAIL_TEXT)
             c2.alignment = Alignment(horizontal="center", vertical="center")
 
     ws_sum.column_dimensions["A"].width = 34
@@ -105,7 +105,7 @@ def create_three_sheet_excel_report(output_path, summary_dict, test_cases_list, 
     for col_idx in range(1, len(case_headers) + 1):
         c = ws_cases.cell(row=1, column=col_idx)
         c.fill = PatternFill(start_color=HEADER_BG, end_color=HEADER_BG, fill_type="solid")
-        c.font = Font(name="Segoe UI", size=10, bold=True, color="FFFFFF")
+        c.font = Font(name="Arial", size=10, bold=True, color="FFFFFF")
         c.alignment = Alignment(horizontal="center", vertical="center")
         c.border = thin_border
 
@@ -138,7 +138,7 @@ def create_three_sheet_excel_report(output_path, summary_dict, test_cases_list, 
         for col_idx in range(1, len(case_headers) + 1):
             cell = ws_cases.cell(row=r_idx, column=col_idx)
             cell.border = thin_border
-            cell.font = Font(name="Segoe UI", size=9.5)
+            cell.font = Font(name="Arial", size=9.5)
             cell.fill = row_fill
 
             if col_idx in [1, 3, 10, 11, 12]:
@@ -150,13 +150,13 @@ def create_three_sheet_excel_report(output_path, summary_dict, test_cases_list, 
             if col_idx == 10:
                 if status_val == "PASS" or status_val == "PASSED":
                     cell.fill = PatternFill(start_color=PASS_BG, end_color=PASS_BG, fill_type="solid")
-                    cell.font = Font(name="Segoe UI", size=9.5, bold=True, color=PASS_TEXT)
+                    cell.font = Font(name="Arial", size=9.5, bold=True, color=PASS_TEXT)
                 elif status_val == "FAIL" or status_val == "FAILED":
                     cell.fill = PatternFill(start_color=FAIL_BG, end_color=FAIL_BG, fill_type="solid")
-                    cell.font = Font(name="Segoe UI", size=9.5, bold=True, color=FAIL_TEXT)
+                    cell.font = Font(name="Arial", size=9.5, bold=True, color=FAIL_TEXT)
                 else:
                     cell.fill = PatternFill(start_color=SKIP_BG, end_color=SKIP_BG, fill_type="solid")
-                    cell.font = Font(name="Segoe UI", size=9.5, bold=True, color=SKIP_TEXT)
+                    cell.font = Font(name="Arial", size=9.5, bold=True, color=SKIP_TEXT)
 
     # Auto-adjust column width
     for col in ws_cases.columns:
@@ -183,7 +183,7 @@ def create_three_sheet_excel_report(output_path, summary_dict, test_cases_list, 
     for col_idx in range(1, len(failed_headers) + 1):
         c = ws_failed.cell(row=1, column=col_idx)
         c.fill = PatternFill(start_color="922B21" if failed_cases_list else HEADER_BG, end_color="922B21" if failed_cases_list else HEADER_BG, fill_type="solid")
-        c.font = Font(name="Segoe UI", size=10, bold=True, color="FFFFFF")
+        c.font = Font(name="Arial", size=10, bold=True, color="FFFFFF")
         c.alignment = Alignment(horizontal="center", vertical="center")
         c.border = thin_border
 
@@ -209,7 +209,7 @@ def create_three_sheet_excel_report(output_path, summary_dict, test_cases_list, 
             for col_idx in range(1, len(failed_headers) + 1):
                 cell = ws_failed.cell(row=r_idx, column=col_idx)
                 cell.border = thin_border
-                cell.font = Font(name="Segoe UI", size=9.5)
+                cell.font = Font(name="Arial", size=9.5)
                 cell.fill = PatternFill(start_color=FAIL_BG, end_color=FAIL_BG, fill_type="solid")
                 if col_idx in [1, 9, 10]:
                     cell.alignment = Alignment(horizontal="center", vertical="center")
@@ -221,7 +221,7 @@ def create_three_sheet_excel_report(output_path, summary_dict, test_cases_list, 
         ws_failed.merge_cells("A2:K2")
         no_fail_cell = ws_failed["A2"]
         no_fail_cell.value = "No failed test cases. All executed test cases passed successfully."
-        no_fail_cell.font = Font(name="Segoe UI", size=10, bold=True, color=PASS_TEXT)
+        no_fail_cell.font = Font(name="Arial", size=10, bold=True, color=PASS_TEXT)
         no_fail_cell.fill = PatternFill(start_color=PASS_BG, end_color=PASS_BG, fill_type="solid")
         no_fail_cell.alignment = Alignment(horizontal="center", vertical="center")
         ws_failed.row_dimensions[2].height = 26
