@@ -62,13 +62,14 @@ def create_three_sheet_excel_report(output_path, summary_dict, test_cases_list, 
         c.border = thin_border
 
     # Summary Rows
-    for r_idx, (k, v) in enumerate(summary_dict.items(), start=3):
+    current_row = 3
+    for k, v in summary_dict.items():
         if k == "Report Title":
             continue
         ws_sum.append([k, str(v)])
-        ws_sum.row_dimensions[r_idx].height = 20
-        c1 = ws_sum.cell(row=r_idx, column=1)
-        c2 = ws_sum.cell(row=r_idx, column=2)
+        ws_sum.row_dimensions[current_row].height = 20
+        c1 = ws_sum.cell(row=current_row, column=1)
+        c2 = ws_sum.cell(row=current_row, column=2)
         c1.font = Font(name="Arial", size=10, bold=True, color="1F2937")
         c2.font = Font(name="Arial", size=10, color="111827")
         c1.border = thin_border
@@ -84,6 +85,7 @@ def create_three_sheet_excel_report(output_path, summary_dict, test_cases_list, 
                 c2.fill = PatternFill(start_color=FAIL_BG, end_color=FAIL_BG, fill_type="solid")
                 c2.font = Font(name="Arial", size=10, bold=True, color=FAIL_TEXT)
             c2.alignment = Alignment(horizontal="center", vertical="center")
+        current_row += 1
 
     ws_sum.column_dimensions["A"].width = 34
     ws_sum.column_dimensions["B"].width = 50
@@ -148,10 +150,10 @@ def create_three_sheet_excel_report(output_path, summary_dict, test_cases_list, 
 
             # Format Status cell
             if col_idx == 10:
-                if status_val == "PASS" or status_val == "PASSED":
+                if status_val in ["PASS", "PASSED"]:
                     cell.fill = PatternFill(start_color=PASS_BG, end_color=PASS_BG, fill_type="solid")
                     cell.font = Font(name="Arial", size=9.5, bold=True, color=PASS_TEXT)
-                elif status_val == "FAIL" or status_val == "FAILED":
+                elif status_val in ["FAIL", "FAILED"]:
                     cell.fill = PatternFill(start_color=FAIL_BG, end_color=FAIL_BG, fill_type="solid")
                     cell.font = Font(name="Arial", size=9.5, bold=True, color=FAIL_TEXT)
                 else:
@@ -254,7 +256,7 @@ def create_standalone_html_report(output_path, title, summary_dict, test_cases_l
     <title>{title}</title>
     <style>
         * {{ box-sizing: border-box; margin: 0; padding: 0; }}
-        body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0B132B; color: #E2E8F0; padding: 30px; }}
+        body {{ font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif; background: #0B132B; color: #E2E8F0; padding: 30px; }}
         .container {{ max-width: 1200px; margin: 0 auto; }}
         .header {{ background: #1C2541; padding: 25px; border-radius: 12px; border: 1px solid #3A506B; margin-bottom: 25px; }}
         .header h1 {{ color: #00F2FE; font-size: 24px; margin-bottom: 8px; }}
@@ -300,7 +302,7 @@ def create_standalone_html_report(output_path, title, summary_dict, test_cases_l
             </thead>
             <tbody>
 """
-    for tc in test_cases_list[:500]: # display up to 500 rows
+    for tc in test_cases_list[:500]:
         status_val = tc.get("Status", "PASS").upper()
         badge_cls = "badge-pass" if status_val in ["PASS", "PASSED"] else "badge-fail"
         html += f"""
