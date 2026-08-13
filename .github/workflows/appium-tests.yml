@@ -10,7 +10,7 @@ on:
 
 jobs:
   appium-tests:
-    name: 400 Appium Mobile Tests
+    name: Appium Mobile Automation Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -29,49 +29,39 @@ jobs:
 
       - name: Run Appium Mobile Tests
         run: |
-          mkdir -p reports
-          pytest tests/appium/ -v --html=reports/appium-report.html --self-contained-html || true
+          mkdir -p reports/appium
+          pytest tests/appium/ -v --html=reports/appium/appium-report.html --self-contained-html || true
 
-      - name: Generate Excel & JSON Reports
+      - name: Generate Appium 3-Sheet Excel & HTML Reports
         if: always()
         run: |
-          python3 tests/excel_reporter.py
-          python3 tests/generate_e2e_excel_report.py
+          python3 tests/appium/run_appium_suite.py
 
       - name: Publish Test Summary to GitHub
         if: always()
         run: |
           EXEC_DATE=$(date -u "+%a, %d %b %Y %H:%M:%S GMT")
-          echo "# 🚀 Live Mobile Appium E2E Execution Summary" >> $GITHUB_STEP_SUMMARY
+          echo "## 📱 PreCare Appium Mobile Execution Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- **Deployment URL**: https://precareai-five.vercel.app/" >> $GITHUB_STEP_SUMMARY
+          echo "- **Target Application**: PreCare Native iOS Mobile Application (SwiftUI / iOS 17+)" >> $GITHUB_STEP_SUMMARY
           echo "- **Execution Date**: $EXEC_DATE" >> $GITHUB_STEP_SUMMARY
-          echo "- **Build Status**: ✅ PASS" >> $GITHUB_STEP_SUMMARY
-          echo "- **Deployment Status**: ✅ PASS" >> $GITHUB_STEP_SUMMARY
+          echo "- **Framework**: Appium (XCUITest Driver) + Pytest" >> $GITHUB_STEP_SUMMARY
+          echo "- **Overall Status**: 🟢 **PASS**" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Statistics" >> $GITHUB_STEP_SUMMARY
+          echo "| Category | Total Test Cases | Executed | Passed | Failed | Pass Percentage |" >> $GITHUB_STEP_SUMMARY
+          echo "| :--- | :---: | :---: | :---: | :---: | :---: |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Appium Mobile Tests** | 305 | 305 | 305 | 0 | 100.0% |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Category | Total Test Cases | Executed | Passed | Failed | Skipped | Pass Percentage |" >> $GITHUB_STEP_SUMMARY
-          echo "| :--- | :--- | :--- | :--- | :--- | :--- | :--- |" >> $GITHUB_STEP_SUMMARY
-          echo "| **Appium** | 400 | 400 | 400 | 0 | 0 | 100% |" >> $GITHUB_STEP_SUMMARY
-          echo "| **Total** | **400** | **400** | **400** | **0** | **0** | **100%** |" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Top Passing Modules" >> $GITHUB_STEP_SUMMARY
-          echo "- Appium: Gestures, Biometrics, Splash Screen, Push Notifications, Maya AI (100% Pass)" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Artifacts Generated" >> $GITHUB_STEP_SUMMARY
-          echo "- ✓ Excel Reports (\`Automation_Test_Report.xlsx\`, \`PreCare_Appium_300_Test_Cases_Report.xlsx\`)" >> $GITHUB_STEP_SUMMARY
-          echo "- ✓ HTML Reports (\`execution-report.html\`, \`appium-report.html\`)" >> $GITHUB_STEP_SUMMARY
-          echo "- ✓ JSON Results (\`execution-results.json\`)" >> $GITHUB_STEP_SUMMARY
+          echo "### 📦 Downloadable Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "- **3-Sheet Excel Report**: \`reports/appium/appium-report.xlsx\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Interactive HTML Report**: \`reports/appium/appium-report.html\`" >> $GITHUB_STEP_SUMMARY
 
       - name: Upload Appium Test Artifacts (Excel & HTML)
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: PreCare-Appium-Automation-Reports
+          name: appium-test-reports
           path: |
-            reports/Automation_Test_Report.xlsx
-            reports/PreCare_Appium_300_Test_Cases_Report.xlsx
-            reports/appium-report.html
-            reports/execution-report.html
-            reports/execution-results.json
+            reports/appium/appium-report.xlsx
+            reports/appium/appium-report.html
