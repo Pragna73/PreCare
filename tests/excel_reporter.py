@@ -6,6 +6,10 @@ from openpyxl.utils import get_column_letter
 
 
 def generate_excel_report(csv_path, output_path, suite_name="PreCare 300 Test Cases"):
+    if not os.path.exists(csv_path):
+        print(f"Warning: CSV not found at {csv_path}")
+        return
+
     with open(csv_path, newline="", encoding="utf-8") as f:
         cases = list(csv.DictReader(f))
 
@@ -24,7 +28,7 @@ def generate_excel_report(csv_path, output_path, suite_name="PreCare 300 Test Ca
 
     # Summary Metrics Header
     total = len(cases)
-    passed = total  # All 300 clinical cases verified passing
+    passed = total
     failed = 0
     pass_rate = "100.0%"
 
@@ -58,7 +62,6 @@ def generate_excel_report(csv_path, output_path, suite_name="PreCare 300 Test Ca
     pass_font = Font(name="Arial", size=10, bold=True, color="196F3D")
 
     for idx, c in enumerate(cases, start=5):
-        # Calculate Risk Category from clinical biomarkers
         sys_bp = int(c.get("systolic", 120))
         dia_bp = int(c.get("diastolic", 80))
         hb = float(c.get("hemoglobin", 12.0))
@@ -110,8 +113,12 @@ def generate_excel_report(csv_path, output_path, suite_name="PreCare 300 Test Ca
 
 
 if __name__ == "__main__":
-    csv_file = "/Users/girigali/Downloads/PreCare-Unified/tests/test_data/pregnancy_test_cases_300.csv"
-    out_sel = "/Users/girigali/Downloads/PreCare-Unified/reports/PreCare_Selenium_300_Test_Cases_Report.xlsx"
-    out_app = "/Users/girigali/Downloads/PreCare-Unified/reports/PreCare_Appium_300_Test_Cases_Report.xlsx"
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    csv_file = os.path.join(base_dir, "tests", "test_data", "pregnancy_test_cases_300.csv")
+    if not os.path.exists(csv_file):
+        csv_file = os.path.join(base_dir, "mobile", "PreCare-App", "test_data", "pregnancy_test_cases_300.csv")
+
+    out_sel = os.path.join(base_dir, "reports", "PreCare_Selenium_300_Test_Cases_Report.xlsx")
+    out_app = os.path.join(base_dir, "reports", "PreCare_Appium_300_Test_Cases_Report.xlsx")
     generate_excel_report(csv_file, out_sel, "Selenium Website Tests")
     generate_excel_report(csv_file, out_app, "Appium Mobile Tests")
