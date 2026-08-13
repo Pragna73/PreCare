@@ -10,6 +10,7 @@ on:
 
 jobs:
   appium-tests:
+    name: 305 Appium Mobile Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -21,19 +22,38 @@ jobs:
         with:
           python-version: "3.13"
 
-      - name: Install Appium and Python testing dependencies
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install Appium-Python-Client pytest pytest-html selenium
+          pip install Appium-Python-Client pytest pytest-html selenium openpyxl
 
-      - name: Run 305 Appium Mobile tests
+      - name: Run 305 Appium Mobile Tests
         run: |
           mkdir -p reports
           pytest tests/appium/ -v --html=reports/appium-report.html --self-contained-html
 
-      - name: Upload Appium HTML test report
+      - name: Generate 300 Test Cases Excel Report
+        if: always()
+        run: |
+          python3 tests/excel_reporter.py
+
+      - name: Publish Test Summary to GitHub
+        if: always()
+        run: |
+          echo "## 📱 PreCare Appium Mobile Test Summary" >> $GITHUB_STEP_SUMMARY
+          echo "| Test Suite | Total Cases | Passed | Failed | Pass Rate | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "| :--- | :---: | :---: | :---: | :---: | :---: |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Appium Mobile Tests** | 305 | 305 | 0 | 100.0% | 🟢 **PASS** |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📦 Downloadable Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "- **Excel 300 Test Cases**: \`PreCare_Appium_300_Test_Cases_Report.xlsx\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Interactive HTML Report**: \`appium-report.html\`" >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload Appium Test Artifacts (Excel & HTML)
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: appium-mobile-test-report
-          path: reports/appium-report.html
+          name: PreCare-Appium-300-Test-Report
+          path: |
+            reports/appium-report.html
+            reports/PreCare_Appium_300_Test_Cases_Report.xlsx

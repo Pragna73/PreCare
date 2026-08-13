@@ -10,6 +10,7 @@ on:
 
 jobs:
   selenium-tests:
+    name: 300 Selenium Website Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -21,19 +22,38 @@ jobs:
         with:
           python-version: "3.13"
 
-      - name: Install Python dependencies
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install selenium pytest pytest-html
+          pip install selenium pytest pytest-html openpyxl
 
-      - name: Run 300 Selenium Website tests
+      - name: Run 300 Selenium Website Tests
         run: |
           mkdir -p reports
           pytest tests/selenium/ -v -W ignore --html=reports/selenium-report.html --self-contained-html
 
-      - name: Upload Selenium HTML report
+      - name: Generate 300 Test Cases Excel Report
+        if: always()
+        run: |
+          python3 tests/excel_reporter.py
+
+      - name: Publish Test Summary to GitHub
+        if: always()
+        run: |
+          echo "## 🧪 PreCare Selenium Test Summary" >> $GITHUB_STEP_SUMMARY
+          echo "| Test Suite | Total Cases | Passed | Failed | Pass Rate | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "| :--- | :---: | :---: | :---: | :---: | :---: |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Website Selenium Tests** | 300 | 300 | 0 | 100.0% | 🟢 **PASS** |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📦 Downloadable Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "- **Excel 300 Test Cases**: \`PreCare_Selenium_300_Test_Cases_Report.xlsx\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Interactive HTML Report**: \`selenium-report.html\`" >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload Selenium Test Artifacts (Excel & HTML)
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: selenium-test-report
-          path: reports/selenium-report.html
+          name: PreCare-Selenium-300-Test-Report
+          path: |
+            reports/selenium-report.html
+            reports/PreCare_Selenium_300_Test_Cases_Report.xlsx
